@@ -10,13 +10,13 @@ const db = new Database(DB_PATH);
 // Enable WAL mode for better concurrency
 db.pragma('journal_mode = WAL');
 
-// Initialize schema
+// Initialize schema - NEW TASKS/SUBTASKS/ARTIFACTS FORMAT
 function initSchema() {
   console.log('🗄️  Initializing SQLite schema...');
   
-  // Create missions table
+  // Create tasks table (was missions)
   db.exec(`
-    CREATE TABLE IF NOT EXISTS missions (
+    CREATE TABLE IF NOT EXISTS tasks (
       id TEXT PRIMARY KEY,
       user_message TEXT NOT NULL,
       source TEXT DEFAULT 'whatsapp',
@@ -27,61 +27,48 @@ function initSchema() {
       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
     
-    CREATE INDEX IF NOT EXISTS idx_missions_status ON missions(status);
-    CREATE INDEX IF NOT EXISTS idx_missions_created ON missions(created_at);
+    CREATE INDEX IF NOT EXISTS idx_tasks_status ON tasks(status);
+    CREATE INDEX IF NOT EXISTS idx_tasks_created ON tasks(created_at);
   `);
   
-  // Create mission_agents table
+  // Create subtasks table (was mission_agents)
   db.exec(`
-    CREATE TABLE IF NOT EXISTS mission_agents (
+    CREATE TABLE IF NOT EXISTS subtasks (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      mission_id TEXT NOT NULL,
+      task_id TEXT NOT NULL,
       agent_id TEXT NOT NULL,
       agent_name TEXT NOT NULL,
-      status TEXT,
-      started_at DATETIME,
-      completed_at DATETIME,
-      task_description TEXT,
+      stage TEXT NOT NULL,
+      status TEXT DEFAULT 'pending',
+      start_time DATETIME,
+      end_time DATETIME,
       duration_seconds INTEGER,
-      FOREIGN KEY (mission_id) REFERENCES missions(id) ON DELETE CASCADE
+      task_description TEXT,
+      FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE
     );
     
-    CREATE INDEX IF NOT EXISTS idx_agents_mission ON mission_agents(mission_id);
+    CREATE INDEX IF NOT EXISTS idx_subtasks_task ON subtasks(task_id);
   `);
   
-  // Create artifacts table
+  // Create artifacts table (updated format)
   db.exec(`
     CREATE TABLE IF NOT EXISTS artifacts (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      mission_id TEXT NOT NULL,
+      task_id TEXT NOT NULL,
+      subtask_id INTEGER,
       artifact_id TEXT,
       file_path TEXT NOT NULL,
       file_type TEXT,
+      file_size INTEGER,
       description TEXT,
       created_by TEXT,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (mission_id) REFERENCES missions(id) ON DELETE CASCADE
+      FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
+      FOREIGN KEY (subtask_id) REFERENCES subtasks(id) ON DELETE CASCADE
     );
     
-    CREATE INDEX IF NOT EXISTS idx_artifacts_mission ON artifacts(mission_id);
-  `);
-  
-  // Create timeline_events table
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS timeline_events (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      mission_id TEXT NOT NULL,
-      event_id TEXT,
-      event_type TEXT NOT NULL,
-      agent TEXT,
-      message TEXT NOT NULL,
-      details TEXT,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (mission_id) REFERENCES missions(id) ON DELETE CASCADE
-    );
-    
-    CREATE INDEX IF NOT EXISTS idx_timeline_mission ON timeline_events(mission_id);
-    CREATE INDEX IF NOT EXISTS idx_timeline_created ON timeline_events(created_at);
+    CREATE INDEX IF NOT EXISTS idx_artifacts_task ON artifacts(task_id);
+    CREATE INDEX IF NOT EXISTS idx_artifacts_subtask ON artifacts(subtask_id);
   `);
   
   console.log('✅ Schema initialized');
@@ -89,6 +76,5 @@ function initSchema() {
 
 // Initialize
 initSchema();
-console.log('🗄️  SQLite-only mode active');
 
 module.exports = { db };

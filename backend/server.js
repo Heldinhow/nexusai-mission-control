@@ -8,7 +8,7 @@ const http = require('http');
 // Import database
 const { db } = require('./database');
 
-const app = express();
+global.app = express();
 app.use(cors());
 app.use(express.json());
 
@@ -43,6 +43,7 @@ function broadcastUpdate(type, data) {
 app.get('/api/agents', async (req, res) => {
   try {
     const agents = [];
+    const now = Date.now();
     
     try {
       await fs.access(AGENTS_DIR);
@@ -58,22 +59,55 @@ app.get('/api/agents', async (req, res) => {
         const status = await readJSON(path.join(agentPath, 'status.json')) || {};
         const notification = await readJSON(path.join(agentPath, 'notification.json'));
         
+        // Heurística para determinar status
+        let agentStatus = status.state || 'unknown';
+        
+        // Se status.json não tem state, tentar inferir
+        if (!status.state) {
+          // Verificar se há atividade recente (menos de 5 minutos)
+          if (status.updated_at) {
+            const updatedAt = new Date(status.updated_at).getTime();
+            const minutesSinceUpdate = (now - updatedAt) / 1000 / 60;
+            
+            if (minutesSinceUpdate < 5) {
+              agentStatus = 'idle';
+            } else if (notification?.timestamp) {
+              // Se completou uma tarefa recentemente
+              const notifTime = new Date(notification.timestamp).getTime();
+              const minutesSinceNotif = (now - notifTime) / 1000 / 60;
+              if (minutesSinceNotif < 10) {
+                agentStatus = 'completed';
+              } else {
+                agentStatus = 'idle';
+              }
+            }
+          } else if (notification?.timestamp) {
+            // Nunca executou, está parado
+            agentStatus = 'idle';
+          }
+        }
+        
+        // Verificar se há progresso ativo
+        const isActive = status.state === 'running' || 
+                        (notification?.progress && notification.progress < 100);
+        
         agents.push({
           id: entry.name,
           name: entry.name,
-          status: status.state || 'unknown',
+          status: agentStatus,
           taskCount: status.taskCount || 0,
           createdAt: status.created_at || new Date().toISOString(),
           updatedAt: status.updated_at || new Date().toISOString(),
           completedAt: notification?.timestamp || null,
           progress: notification?.progress || null,
-          isActive: status.state === 'running',
+          isActive: isActive,
           hasNotification: !!notification,
           notification: notification || null
         });
       }
     }
     
+    // Ordenar: running > completed > idle > unknown
     agents.sort((a, b) => {
       const order = { running: 0, completed: 1, idle: 2, unknown: 3 };
       return (order[a.status] || 3) - (order[b.status] || 3);
@@ -549,3 +583,12 @@ server.listen(PORT, '0.0.0.0', () => {
   console.log(`📁 Agents: ${AGENTS_DIR}`);
   console.log(`⚡ WebSocket: ws://0.0.0.0:${PORT}/ws`);
 });
+
+// Tasks API Routes
+require('./tasks-routes');
+
+// WhatsApp Routes
+require('./whatsapp-routes');
+
+// Progress Routes
+require('./progress-routes');

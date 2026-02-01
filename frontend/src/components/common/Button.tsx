@@ -1,69 +1,94 @@
-import React from 'react'
+import React from 'react';
+import { Loader2 } from 'lucide-react';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'danger' | 'ghost'
-  size?: 'sm' | 'md' | 'lg'
-  isLoading?: boolean
-  children: React.ReactNode
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  isLoading?: boolean;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
+  children: React.ReactNode;
 }
 
 export const Button: React.FC<ButtonProps> = ({
   variant = 'primary',
   size = 'md',
   isLoading = false,
+  leftIcon,
+  rightIcon,
   children,
   className = '',
   disabled,
   ...props
 }) => {
-  const baseStyles = 'inline-flex items-center justify-center font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-nexus-bg disabled:opacity-50 disabled:cursor-not-allowed'
-  
+  const baseStyles = `
+    inline-flex items-center justify-center gap-2
+    font-medium rounded-md
+    transition-all duration-150 ease-in-out
+    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-nexus-bg-primary focus:ring-nexus-primary-500
+    disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent
+  `;
+
   const variantStyles = {
-    primary: 'bg-nexus-accent text-nexus-bg hover:bg-nexus-accent-hover focus:ring-nexus-accent',
-    secondary: 'bg-nexus-card text-nexus-text-primary border border-nexus-border hover:bg-nexus-border focus:ring-nexus-accent',
-    danger: 'bg-nexus-danger text-white hover:bg-red-600 focus:ring-red-500',
-    ghost: 'text-nexus-text-secondary hover:text-nexus-text-primary hover:bg-nexus-card focus:ring-nexus-accent',
-  }
-  
+    primary: `
+      bg-nexus-primary-500 text-white
+      hover:bg-nexus-primary-600
+      active:bg-nexus-primary-700
+      focus:ring-nexus-primary-500
+    `,
+    secondary: `
+      bg-transparent border border-nexus-border text-nexus-text-secondary
+      hover:bg-nexus-bg-tertiary hover:text-nexus-text-primary
+      active:bg-nexus-bg-secondary
+      focus:ring-nexus-border
+    `,
+    danger: `
+      bg-nexus-danger text-white
+      hover:bg-red-700
+      active:bg-red-800
+      focus:ring-nexus-danger
+    `,
+    ghost: `
+      bg-transparent text-nexus-text-secondary
+      hover:bg-nexus-bg-tertiary hover:text-nexus-text-primary
+      active:bg-nexus-bg-secondary
+      focus:ring-nexus-border
+    `,
+  };
+
   const sizeStyles = {
-    sm: 'px-3 py-1.5 text-sm',
-    md: 'px-4 py-2 text-sm',
-    lg: 'px-6 py-3 text-base',
-  }
-  
+    sm: 'h-8 px-3 text-sm',
+    md: 'h-10 px-4 text-sm',
+    lg: 'h-12 px-6 text-base',
+  };
+
+  const combinedClassName = `
+    ${baseStyles}
+    ${variantStyles[variant]}
+    ${sizeStyles[size]}
+    ${className}
+  `.trim().replace(/\s+/g, ' ');
+
   return (
     <button
-      className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
+      className={combinedClassName}
       disabled={disabled || isLoading}
       {...props}
     >
       {isLoading ? (
         <>
-          <svg
-            className="animate-spin -ml-1 mr-2 h-4 w-4"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            />
-          </svg>
-          Loading...
+          <Loader2 className="w-4 h-4 animate-spin" />
+          <span>Carregando...</span>
         </>
       ) : (
-        children
+        <>
+          {leftIcon && <span className="flex-shrink-0">{leftIcon}</span>}
+          {children}
+          {rightIcon && <span className="flex-shrink-0">{rightIcon}</span>}
+        </>
       )}
     </button>
-  )
-}
+  );
+};
+
+export default Button;

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Target, Plus, X } from 'lucide-react'
 import { useMissionStore } from '../stores/missionStore'
 import { useMissions } from '../hooks/useMissions'
 import { MissionCard } from './MissionCard'
@@ -35,13 +36,24 @@ export function MissionList() {
     return missions.filter(m => m.status === status).length
   }
   
+  const getFilterLabel = (status: string) => {
+    switch (status) {
+      case 'all': return 'Todas'
+      case 'pending': return 'Pendentes'
+      case 'in_progress': return 'Em Progresso'
+      case 'completed': return 'Concluídas'
+      case 'failed': return 'Falhas'
+      default: return status
+    }
+  }
+  
   return (
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <h2 className="text-xl font-bold flex items-center gap-2">
-            <span className="text-neon-cyan">🎯</span>
+          <h2 className="text-xl font-bold flex items-center gap-2 text-nexus-text-primary">
+            <Target className="w-5 h-5 text-nexus-primary-500" />
             Missões
           </h2>
           <LiveIndicator connected={wsConnected} />
@@ -49,11 +61,9 @@ export function MissionList() {
         
         <button
           onClick={() => setShowNewMission(true)}
-          className="px-4 py-2 rounded-lg bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/30 hover:bg-neon-cyan/30 transition-colors flex items-center gap-2"
+          className="px-4 py-2 rounded-lg bg-nexus-primary-500/20 text-nexus-primary-400 border border-nexus-primary-500/30 hover:bg-nexus-primary-500/30 transition-colors flex items-center gap-2"
         >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-          </svg>
+          <Plus className="w-4 h-4" />
           Nova Missão
         </button>
       </div>
@@ -66,15 +76,11 @@ export function MissionList() {
             onClick={() => setFilter(status)}
             className={`px-3 py-1.5 rounded-lg text-sm transition-colors ${
               filter === status 
-                ? 'bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/30' 
-                : 'bg-white/5 text-slate-400 hover:bg-white/10'
+                ? 'bg-nexus-primary-500/20 text-nexus-primary-400 border border-nexus-primary-500/30' 
+                : 'bg-nexus-bg-secondary text-nexus-text-muted hover:bg-nexus-bg-tertiary'
             }`}
           >
-            {status === 'all' && 'Todas'}
-            {status === 'pending' && 'Pendentes'}
-            {status === 'in_progress' && 'Em Progresso'}
-            {status === 'completed' && 'Completas'}
-            {status === 'failed' && 'Falhas'}
+            {getFilterLabel(status)}
             <span className="ml-2 text-xs opacity-50">({getStatusCount(status)})</span>
           </button>
         ))}
@@ -82,25 +88,33 @@ export function MissionList() {
       
       {/* New Mission Modal */}
       {showNewMission && (
-        <div className="glass rounded-xl p-4 border border-neon-cyan/30">
-          <h3 className="text-sm font-medium text-white mb-3">Nova Missão</h3>
+        <div className="bg-nexus-bg-secondary rounded-xl p-4 border border-nexus-primary-500/30">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-medium text-nexus-text-primary">Nova Missão</h3>
+            <button
+              onClick={() => setShowNewMission(false)}
+              className="p-1 rounded hover:bg-nexus-bg-tertiary transition-colors"
+            >
+              <X className="w-4 h-4 text-nexus-text-muted" />
+            </button>
+          </div>
           <textarea
             value={newMissionText}
             onChange={(e) => setNewMissionText(e.target.value)}
             placeholder="Descreva o que você quer que os agentes façam..."
-            className="w-full h-24 bg-slate-900/50 border border-white/10 rounded-lg p-3 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-neon-cyan/50"
+            className="w-full h-24 bg-nexus-bg-primary border border-nexus-border rounded-lg p-3 text-sm text-nexus-text-primary placeholder:text-nexus-text-muted focus:outline-none focus:border-nexus-primary-500/50 resize-none"
           />
           <div className="flex items-center justify-end gap-2 mt-3">
             <button
               onClick={() => setShowNewMission(false)}
-              className="px-4 py-2 rounded-lg text-sm text-slate-400 hover:text-white transition-colors"
+              className="px-4 py-2 rounded-lg text-sm text-nexus-text-muted hover:text-nexus-text-primary transition-colors"
             >
               Cancelar
             </button>
             <button
               onClick={handleCreateMission}
               disabled={!newMissionText.trim()}
-              className="px-4 py-2 rounded-lg bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/30 hover:bg-neon-cyan/30 disabled:opacity-50 disabled:cursor-not-allowed text-sm transition-colors"
+              className="px-4 py-2 rounded-lg bg-nexus-primary-500/20 text-nexus-primary-400 border border-nexus-primary-500/30 hover:bg-nexus-primary-500/30 disabled:opacity-50 disabled:cursor-not-allowed text-sm transition-colors"
             >
               Criar Missão
             </button>
@@ -111,8 +125,10 @@ export function MissionList() {
       {/* Mission List */}
       <div className="space-y-3">
         {filteredMissions.length === 0 ? (
-          <div className="text-center py-12 text-slate-500">
-            <div className="text-4xl mb-3">🎯</div>
+          <div className="text-center py-12 text-nexus-text-muted">
+            <div className="flex justify-center mb-3">
+              <Target className="w-12 h-12 text-nexus-text-muted opacity-50" />
+            </div>
             <p>Nenhuma missão encontrada</p>
             <p className="text-sm opacity-50">Crie uma nova missão para começar</p>
           </div>

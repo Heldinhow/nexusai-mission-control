@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* === DESIGN SYSTEM NEXUS - TOKENS CSS === */
+  /* Paleta profissional corporativa para dark theme */
+
+  /* Brand/Primary - Azul corporativo */
+  --nexus-primary-50: #eff6ff;
+  --nexus-primary-100: #dbeafe;
+  --nexus-primary-200: #bfdbfe;
+  --nexus-primary-300: #93c5fd;
+  --nexus-primary-400: #60a5fa;
+  --nexus-primary-500: #2563eb;
+  --nexus-primary-600: #1d4ed8;
+  --nexus-primary-700: #1e40af;
+  --nexus-primary-800: #1e3a8a;
+  --nexus-primary-900: #1e3a8a;
+
+  /* Accent - Ciano profissional */
+  --nexus-accent-50: #ecfeff;
+  --nexus-accent-100: #cffafe;
+  --nexus-accent-200: #a5f3fc;
+  --nexus-accent-300: #67e8f9;
+  --nexus-accent-400: #22d3ee;
+  --nexus-accent-500: #0891b2;
+  --nexus-accent-600: #0e7490;
+  --nexus-accent-700: #155e75;
+  --nexus-accent-800: #164e63;
+  --nexus-accent-900: #083344;
+
+  /* Estados */
+  --nexus-success: #059669;
+  --nexus-success-light: rgba(5, 150, 105, 0.1);
+  --nexus-success-border: rgba(5, 150, 105, 0.2);
+  
+  --nexus-warning: #d97706;
+  --nexus-warning-light: rgba(217, 119, 6, 0.1);
+  --nexus-warning-border: rgba(217, 119, 6, 0.2);
+  
+  --nexus-danger: #dc2626;
+  --nexus-danger-light: rgba(220, 38, 38, 0.1);
+  --nexus-danger-border: rgba(220, 38, 38, 0.2);
+  
+  --nexus-info: #0891b2;
+  --nexus-info-light: rgba(8, 145, 178, 0.1);
+  --nexus-info-border: rgba(8, 145, 178, 0.2);
+
+  /* Backgrounds (Dark Theme) */
+  --nexus-bg-primary: #0f172a;
+  --nexus-bg-secondary: #1e293b;
+  --nexus-bg-tertiary: #334155;
+  --nexus-bg-hover: rgba(51, 65, 85, 0.5);
+
+  /* Texto */
+  --nexus-text-primary: #f8fafc;
+  --nexus-text-secondary: #cbd5e1;
+  --nexus-text-muted: #94a3b8;
+
+  /* Bordas */
+  --nexus-border: #475569;
+  --nexus-border-light: rgba(71, 85, 105, 0.5);
+
+  /* Sombras */
+  --shadow-subtle: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-soft: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-medium: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+
+  /* Transições */
+  --transition-fast: 150ms ease;
+  --transition-base: 200ms ease;
+
+  /* Border Radius */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-full: 9999px;
+}
+
+/* Base styles */
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--nexus-bg-primary);
+  color: var(--nexus-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--nexus-bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--nexus-border);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--nexus-text-muted);
+}
+
+/* Focus styles */
+*:focus-visible {
+  outline: 2px solid var(--nexus-primary-500);
+  outline-offset: 2px;
+}
+
+/* Selection */
+::selection {
+  background-color: var(--nexus-primary-500);
+  color: white;
+}

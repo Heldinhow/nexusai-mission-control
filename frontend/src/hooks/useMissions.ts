@@ -1,21 +1,19 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useCallback } from 'react'
 import { useMissionStore } from '../stores/missionStore'
 import type { Mission } from '../types/mission'
 
 const API_URL = 'http://76.13.101.17:4105'
 
 export function useMissions() {
-  const { 
-    missions, 
-    setMissions, 
-    updateMission, 
-    setLoading, 
-    setError, 
-    wsConnected, 
-    setWsConnected 
+  const {
+    missions,
+    setMissions,
+    updateMission,
+    setLoading,
+    setError,
+    wsConnected,
+    setWsConnected
   } = useMissionStore()
-  
-  const [lastFetch, setLastFetch] = useState(Date.now())
 
   // Fetch missions from API
   const fetchMissions = useCallback(async () => {
@@ -23,9 +21,8 @@ export function useMissions() {
       const res = await fetch(`${API_URL}/api/missions?t=${Date.now()}`)
       const data = await res.json()
       setMissions(data.data || [])
-      setLastFetch(Date.now())
-    } catch (err) {
-      console.error('Failed to fetch missions:', err)
+    } catch {
+      console.error('Failed to fetch missions')
     }
   }, [setMissions])
 
@@ -48,7 +45,7 @@ export function useMissions() {
   // WebSocket connection (optional)
   useEffect(() => {
     let ws: WebSocket | null = null
-    let reconnectTimeout: NodeJS.Timeout
+    let reconnectTimeout: ReturnType<typeof setTimeout> | undefined
     let reconnectAttempts = 0
     const maxReconnectAttempts = 5
 
@@ -61,13 +58,13 @@ export function useMissions() {
 
       try {
         ws = new WebSocket(`ws://76.13.101.17:4105/ws`)
-        
+
         ws.onopen = () => {
-          console.log('🟢 WebSocket connected')
+          console.log('WebSocket connected')
           setWsConnected(true)
           reconnectAttempts = 0
         }
-        
+
         ws.onmessage = (event) => {
           try {
             const data = JSON.parse(event.data)
@@ -76,31 +73,31 @@ export function useMissions() {
             } else if (data.type === 'initial') {
               setMissions(data.missions || [])
             }
-          } catch (err) {
-            console.error('WebSocket message error:', err)
+          } catch {
+            console.error('WebSocket message error')
           }
         }
-        
+
         ws.onclose = () => {
-          console.log('🔴 WebSocket disconnected')
+          console.log('WebSocket disconnected')
           setWsConnected(false)
           reconnectAttempts++
           reconnectTimeout = setTimeout(connect, 5000)
         }
-        
-        ws.onerror = (err) => {
+
+        ws.onerror = () => {
           console.log('WebSocket error, falling back to polling')
           setWsConnected(false)
           ws?.close()
         }
-      } catch (err) {
+      } catch {
         console.log('WebSocket creation failed, using polling')
         setWsConnected(false)
       }
     }
 
     connect()
-    
+
     return () => {
       clearTimeout(reconnectTimeout)
       ws?.close()
@@ -117,7 +114,7 @@ export function useMissions() {
       const data = await res.json()
       await fetchMissions()
       return data.data as Mission
-    } catch (err) {
+    } catch {
       setError('Failed to create mission')
       return null
     }
