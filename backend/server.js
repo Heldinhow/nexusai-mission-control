@@ -457,6 +457,42 @@ app.post('/api/webhook/whatsapp', async (req, res) => {
   }
 });
 
+// POST /api/missions/check-all - Verificar status de todas as missões pendentes
+app.post('/api/missions/check-all', async (req, res) => {
+  try {
+    const { checkAllMissions } = require('./mission-monitor');
+    const result = await checkAllMissions();
+    
+    res.json({
+      data: result,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error checking missions:', error);
+    res.status(500).json({ error: 'Failed to check missions' });
+  }
+});
+
+// POST /api/missions/:id/check - Verificar status de uma missão específica
+app.post('/api/missions/:id/check', async (req, res) => {
+  try {
+    const { checkMissionStatus } = require('./mission-monitor');
+    const result = await checkMissionStatus(req.params.id);
+    
+    if (!result) {
+      return res.status(404).json({ error: 'Mission not found' });
+    }
+    
+    res.json({
+      data: result,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Error checking mission:', error);
+    res.status(500).json({ error: 'Failed to check mission' });
+  }
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   const stats = db.prepare('SELECT COUNT(*) as missions FROM missions').get();
