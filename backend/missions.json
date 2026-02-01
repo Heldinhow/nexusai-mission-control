@@ -1,0 +1,223 @@
+[
+  {
+    "id": "mission_1754068123456_abc123xyz",
+    "userMessage": "vamos criar algo para testar?",
+    "source": "whatsapp",
+    "whatsappMessageId": "wamid.HBgNNTUxMTk4NzI2OTY5NRUCABIYFDVBQTcwRjI4RkQ3QzUzOUI4RUUyAA==",
+    "timestamp": "2025-01-20T14:30:00.000Z",
+    "status": "completed",
+    "progress": 100,
+    "agentsInvolved": ["speckit-master", "opencode-coder", "test-engineer"],
+    "artifacts": [
+      {
+        "id": "artifact_1754068123500_spec001",
+        "path": "agents/speckit-master/outbox/spec.json",
+        "type": "specification",
+        "description": "Especificação para test-flow",
+        "createdBy": "speckit-master",
+        "timestamp": "2025-01-20T14:32:00.000Z"
+      },
+      {
+        "id": "artifact_1754068123600_code001",
+        "path": "agents/opencode-coder/outbox/package.json",
+        "type": "config",
+        "description": "Configuração do projeto",
+        "createdBy": "opencode-coder",
+        "timestamp": "2025-01-20T14:35:00.000Z"
+      },
+      {
+        "id": "artifact_1754068123601_code002",
+        "path": "agents/opencode-coder/outbox/tsconfig.json",
+        "type": "config",
+        "description": "Configuração TypeScript",
+        "createdBy": "opencode-coder",
+        "timestamp": "2025-01-20T14:35:30.000Z"
+      },
+      {
+        "id": "artifact_1754068123602_code003",
+        "path": "agents/opencode-coder/outbox/src/index.ts",
+        "type": "code",
+        "description": "Código fonte principal",
+        "createdBy": "opencode-coder",
+        "timestamp": "2025-01-20T14:36:00.000Z"
+      },
+      {
+        "id": "artifact_1754068123700_test001",
+        "path": "agents/test-engineer/outbox/tests/app.test.ts",
+        "type": "test",
+        "description": "Testes iniciais",
+        "createdBy": "test-engineer",
+        "timestamp": "2025-01-20T14:38:00.000Z"
+      }
+    ],
+    "timeline": [
+      {
+        "id": "event_1754068123456_start",
+        "timestamp": "2025-01-20T14:30:00.000Z",
+        "type": "mission-created",
+        "agent": "system",
+        "message": "Missão criada",
+        "details": {
+          "userMessage": "vamos criar algo para testar?",
+          "source": "whatsapp"
+        }
+      },
+      {
+        "id": "event_1754068123500_speckit_start",
+        "timestamp": "2025-01-20T14:31:00.000Z",
+        "type": "agent-joined",
+        "agent": "speckit-master",
+        "message": "speckit-master iniciou análise de requisitos",
+        "details": {}
+      },
+      {
+        "id": "event_1754068123501_speckit_progress",
+        "timestamp": "2025-01-20T14:32:00.000Z",
+        "type": "progress-update",
+        "agent": "speckit-master",
+        "message": "speckit-master criando especificação...",
+        "details": {
+          "progress": 50
+        }
+      },
+      {
+        "id": "event_1754068123502_speckit_artifact",
+        "timestamp": "2025-01-20T14:32:30.000Z",
+        "type": "artifact-created",
+        "agent": "speckit-master",
+        "message": "Artefato criado: Especificação para test-flow",
+        "details": {
+          "artifactId": "artifact_1754068123500_spec001",
+          "artifactPath": "agents/speckit-master/outbox/spec.json"
+        }
+      },
+      {
+        "id": "event_1754068123503_speckit_done",
+        "timestamp": "2025-01-20T14:33:00.000Z",
+        "type": "progress-update",
+        "agent": "speckit-master",
+        "message": "speckit-master completou especificação",
+        "details": {
+          "progress": 50
+        }
+      },
+      {
+        "id": "event_1754068123600_opencode_start",
+        "timestamp": "2025-01-20T14:33:30.000Z",
+        "type": "agent-joined",
+        "agent": "opencode-coder",
+        "message": "opencode-coder iniciou geração de código",
+        "details": {}
+      },
+      {
+        "id": "event_1754068123601_opencode_progress",
+        "timestamp": "2025-01-20T14:35:00.000Z",
+        "type": "progress-update",
+        "agent": "opencode-coder",
+        "message": "opencode-coder gerando código...",
+        "details": {
+          "progress": 80
+        }
+      },
+      {
+        "id": "event_1754068123602_opencode_artifact1",
+        "timestamp": "2025-01-20T14:35:30.000Z",
+        "type": "artifact-created",
+        "agent": "opencode-coder",
+        "message": "Artefato criado: Configuração do projeto",
+        "details": {
+          "artifactId": "artifact_1754068123600_code001",
+          "artifactPath": "agents/opencode-coder/outbox/package.json"
+        }
+      },
+      {
+        "id": "event_1754068123603_opencode_artifact2",
+        "timestamp": "2025-01-20T14:35:45.000Z",
+        "type": "artifact-created",
+        "agent": "opencode-coder",
+        "message": "Artefato criado: Configuração TypeScript",
+        "details": {
+          "artifactId": "artifact_1754068123601_code002",
+          "artifactPath": "agents/opencode-coder/outbox/tsconfig.json"
+        }
+      },
+      {
+        "id": "event_1754068123604_opencode_artifact3",
+        "timestamp": "2025-01-20T14:36:00.000Z",
+        "type": "artifact-created",
+        "agent": "opencode-coder",
+        "message": "Artefato criado: Código fonte principal",
+        "details": {
+          "artifactId": "artifact_1754068123602_code003",
+          "artifactPath": "agents/opencode-coder/outbox/src/index.ts"
+        }
+      },
+      {
+        "id": "event_1754068123605_opencode_done",
+        "timestamp": "2025-01-20T14:37:00.000Z",
+        "type": "progress-update",
+        "agent": "opencode-coder",
+        "message": "opencode-coder completou geração de código",
+        "details": {
+          "progress": 80
+        }
+      },
+      {
+        "id": "event_1754068123700_test_start",
+        "timestamp": "2025-01-20T14:37:30.000Z",
+        "type": "agent-joined",
+        "agent": "test-engineer",
+        "message": "test-engineer iniciou criação de testes",
+        "details": {}
+      },
+      {
+        "id": "event_1754068123701_test_progress",
+        "timestamp": "2025-01-20T14:38:00.000Z",
+        "type": "progress-update",
+        "agent": "test-engineer",
+        "message": "test-engineer criando testes...",
+        "details": {
+          "progress": 95
+        }
+      },
+      {
+        "id": "event_1754068123702_test_artifact",
+        "timestamp": "2025-01-20T14:38:30.000Z",
+        "type": "artifact-created",
+        "agent": "test-engineer",
+        "message": "Artefato criado: Testes iniciais",
+        "details": {
+          "artifactId": "artifact_1754068123700_test001",
+          "artifactPath": "agents/test-engineer/outbox/tests/app.test.ts"
+        }
+      },
+      {
+        "id": "event_1754068123703_test_done",
+        "timestamp": "2025-01-20T14:39:00.000Z",
+        "type": "progress-update",
+        "agent": "test-engineer",
+        "message": "test-engineer completou testes",
+        "details": {
+          "progress": 95
+        }
+      },
+      {
+        "id": "event_1754068123800_complete",
+        "timestamp": "2025-01-20T14:40:00.000Z",
+        "type": "mission-completed",
+        "agent": "system",
+        "message": "Missão completada com sucesso!",
+        "details": {
+          "agentsCount": 3,
+          "artifactsCount": 5,
+          "duration": "10 minutos"
+        }
+      }
+    ],
+    "metadata": {
+      "projectPath": "/root/.openclaw/workspace/test-flow/",
+      "duration": "10 minutos",
+      "completedAt": "2025-01-20T14:40:00.000Z"
+    }
+  }
+]

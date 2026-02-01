@@ -1,0 +1,196 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --neon-cyan: #00f5ff;
+  --neon-purple: #b829f7;
+  --neon-blue: #3b82f6;
+  --neon-green: #10b981;
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-strong {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.glass-card {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.6) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+  border-color: rgba(0, 245, 255, 0.3);
+  box-shadow: 0 0 30px rgba(0, 245, 255, 0.15), inset 0 0 30px rgba(0, 245, 255, 0.05);
+}
+
+/* Neon Glow */
+.neon-glow-cyan {
+  box-shadow: 0 0 20px rgba(0, 245, 255, 0.3), 0 0 40px rgba(0, 245, 255, 0.1);
+}
+
+.neon-glow-purple {
+  box-shadow: 0 0 20px rgba(184, 41, 247, 0.3), 0 0 40px rgba(184, 41, 247, 0.1);
+}
+
+/* Terminal */
+.terminal {
+  background: rgba(2, 6, 23, 0.95);
+  border: 1px solid rgba(0, 245, 255, 0.2);
+  box-shadow: 0 0 30px rgba(0, 245, 255, 0.1), inset 0 0 30px rgba(0, 245, 255, 0.02);
+}
+
+.terminal-header {
+  background: linear-gradient(90deg, rgba(0, 245, 255, 0.1), rgba(184, 41, 247, 0.1));
+  border-bottom: 1px solid rgba(0, 245, 255, 0.1);
+}
+
+/* Grid Background */
+.bg-grid {
+  background-image: 
+    linear-gradient(rgba(0, 245, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 245, 255, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Dashboard Layout */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 1rem;
+  height: 100%;
+}
+
+/* Log Entry Animation */
+.log-entry {
+  border-left: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.log-entry:hover {
+  background: rgba(0, 245, 255, 0.05);
+  border-left-color: #00f5ff;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 245, 255, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 245, 255, 0.5);
+}
+
+/* Animations */
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 0 0 20px rgba(0, 245, 255, 0.4), 0 0 40px rgba(0, 245, 255, 0.2);
+  }
+  50% { 
+    box-shadow: 0 0 30px rgba(0, 245, 255, 0.8), 0 0 60px rgba(0, 245, 255, 0.4);
+  }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.animate-blink {
+  animation: blink 1s step-end infinite;
+}
+
+/* Text Colors */
+.text-neon-cyan {
+  color: #00f5ff;
+}
+
+.text-neon-purple {
+  color: #b829f7;
+}
+
+.text-neon-green {
+  color: #10b981;
+}
+
+.bg-neon-cyan {
+  background-color: #00f5ff;
+}
+
+.bg-neon-purple {
+  background-color: #b829f7;
+}
+
+.bg-neon-green {
+  background-color: #10b981;
+}
+
+.bg-neon-cyan\/10 {
+  background-color: rgba(0, 245, 255, 0.1);
+}
+
+.bg-neon-purple\/10 {
+  background-color: rgba(184, 41, 247, 0.1);
+}
+
+.bg-neon-green\/10 {
+  background-color: rgba(16, 185, 129, 0.1);
+}
+
+.bg-neon-cyan\/15 {
+  background-color: rgba(0, 245, 255, 0.15);
+}
+
+.bg-neon-purple\/15 {
+  background-color: rgba(184, 41, 247, 0.15);
+}
+
+.from-neon-cyan {
+  --tw-gradient-from: #00f5ff;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(0, 245, 255, 0));
+}
+
+.to-neon-purple {
+  --tw-gradient-to: #b829f7;
+}
+
+.to-neon-blue {
+  --tw-gradient-to: #3b82f6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  aside {
+    display: none;
+  }
+}
